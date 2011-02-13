@@ -1,0 +1,79 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="/css/reset.css"/>
+    <link rel="stylesheet" type="text/css" href="page.css"/>
+    <script type="text/javascript" src="/js/site.js"></script>
+    <script type="text/javascript" src="/js/jquery-1.4.3.min.js"></script>
+    <script type="text/javascript" src="particlecraft.js"></script>
+    <script type="text/javascript" src="page.js"></script>
+  </head>
+  <body>
+    <canvas id="minimap_canvas"></canvas>
+    <canvas id="zoomed_canvas" style="display: none;"></canvas>
+    <!-- TODO: could save a lot of loading time by spriting these. -->
+    <img class="sprite E 0" src="sprites/cow/walking-E-0.png"/>
+    <img class="sprite E 1" src="sprites/cow/walking-E-1.png"/>
+    <img class="sprite E 2" src="sprites/cow/walking-E-2.png"/>
+    <img class="sprite E 3" src="sprites/cow/walking-E-3.png"/>
+    <img class="sprite E 4" src="sprites/cow/walking-E-4.png"/>
+    <img class="sprite E 5" src="sprites/cow/walking-E-5.png"/>
+    <img class="sprite E 6" src="sprites/cow/walking-E-6.png"/>
+    <img class="sprite E 7" src="sprites/cow/walking-E-7.png"/>
+    <img class="sprite N 0" src="sprites/cow/walking-N-0.png"/>
+    <img class="sprite N 1" src="sprites/cow/walking-N-1.png"/>
+    <img class="sprite N 2" src="sprites/cow/walking-N-2.png"/>
+    <img class="sprite N 3" src="sprites/cow/walking-N-3.png"/>
+    <img class="sprite N 4" src="sprites/cow/walking-N-4.png"/>
+    <img class="sprite N 5" src="sprites/cow/walking-N-5.png"/>
+    <img class="sprite N 6" src="sprites/cow/walking-N-6.png"/>
+    <img class="sprite N 7" src="sprites/cow/walking-N-7.png"/>
+    <img class="sprite NE 0" src="sprites/cow/walking-NE-0.png"/>
+    <img class="sprite NE 1" src="sprites/cow/walking-NE-1.png"/>
+    <img class="sprite NE 2" src="sprites/cow/walking-NE-2.png"/>
+    <img class="sprite NE 3" src="sprites/cow/walking-NE-3.png"/>
+    <img class="sprite NE 4" src="sprites/cow/walking-NE-4.png"/>
+    <img class="sprite NE 5" src="sprites/cow/walking-NE-5.png"/>
+    <img class="sprite NE 6" src="sprites/cow/walking-NE-6.png"/>
+    <img class="sprite NE 7" src="sprites/cow/walking-NE-7.png"/>
+    <img class="sprite NW 0" src="sprites/cow/walking-NW-0.png"/>
+    <img class="sprite NW 1" src="sprites/cow/walking-NW-1.png"/>
+    <img class="sprite NW 2" src="sprites/cow/walking-NW-2.png"/>
+    <img class="sprite NW 3" src="sprites/cow/walking-NW-3.png"/>
+    <img class="sprite NW 4" src="sprites/cow/walking-NW-4.png"/>
+    <img class="sprite NW 5" src="sprites/cow/walking-NW-5.png"/>
+    <img class="sprite NW 6" src="sprites/cow/walking-NW-6.png"/>
+    <img class="sprite NW 7" src="sprites/cow/walking-NW-7.png"/>
+    <img class="sprite S 0" src="sprites/cow/walking-S-0.png"/>
+    <img class="sprite S 1" src="sprites/cow/walking-S-1.png"/>
+    <img class="sprite S 2" src="sprites/cow/walking-S-2.png"/>
+    <img class="sprite S 3" src="sprites/cow/walking-S-3.png"/>
+    <img class="sprite S 4" src="sprites/cow/walking-S-4.png"/>
+    <img class="sprite S 5" src="sprites/cow/walking-S-5.png"/>
+    <img class="sprite S 6" src="sprites/cow/walking-S-6.png"/>
+    <img class="sprite S 7" src="sprites/cow/walking-S-7.png"/>
+    <img class="sprite SE 0" src="sprites/cow/walking-SE-0.png"/>
+    <img class="sprite SE 1" src="sprites/cow/walking-SE-1.png"/>
+    <img class="sprite SE 2" src="sprites/cow/walking-SE-2.png"/>
+    <img class="sprite SE 3" src="sprites/cow/walking-SE-3.png"/>
+    <img class="sprite SE 4" src="sprites/cow/walking-SE-4.png"/>
+    <img class="sprite SE 5" src="sprites/cow/walking-SE-5.png"/>
+    <img class="sprite SE 6" src="sprites/cow/walking-SE-6.png"/>
+    <img class="sprite SE 7" src="sprites/cow/walking-SE-7.png"/>
+    <img class="sprite SW 0" src="sprites/cow/walking-SW-0.png"/>
+    <img class="sprite SW 1" src="sprites/cow/walking-SW-1.png"/>
+    <img class="sprite SW 2" src="sprites/cow/walking-SW-2.png"/>
+    <img class="sprite SW 3" src="sprites/cow/walking-SW-3.png"/>
+    <img class="sprite SW 4" src="sprites/cow/walking-SW-4.png"/>
+    <img class="sprite SW 5" src="sprites/cow/walking-SW-5.png"/>
+    <img class="sprite SW 6" src="sprites/cow/walking-SW-6.png"/>
+    <img class="sprite SW 7" src="sprites/cow/walking-SW-7.png"/>
+    <img class="sprite W 0" src="sprites/cow/walking-W-0.png"/>
+    <img class="sprite W 1" src="sprites/cow/walking-W-1.png"/>
+    <img class="sprite W 2" src="sprites/cow/walking-W-2.png"/>
+    <img class="sprite W 3" src="sprites/cow/walking-W-3.png"/>
+    <img class="sprite W 4" src="sprites/cow/walking-W-4.png"/>
+    <img class="sprite W 5" src="sprites/cow/walking-W-5.png"/>
+    <img class="sprite W 6" src="sprites/cow/walking-W-6.png"/>
+    <img class="sprite W 7" src="sprites/cow/walking-W-7.png"/>
+  </body>
+</html>
