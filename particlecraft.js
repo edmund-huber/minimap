@@ -176,7 +176,6 @@ info.ehuber.lab.minimap.ParticleCraft.prototype.drawZoomed = function(gameViewpo
                     var ori_to_dir = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
                     var dir = ori_to_dir[u.ori];
                     ctx.drawImage($('.sprite.' + dir + '.' + u.frame)[0], u.p.x - 0.1, u.p.y - 0.1, 0.1, 0.1);
-                    //ctx.fillRect(u.p.x - 0.1, u.p.y - 0.1, 0.1, 0.1);
                 });
         }
         ctx.restore();
