@@ -20,8 +20,8 @@ info.ehuber.lab.minimap.ParticleCraft = function(minimapCanvas, zoomedCanvas) {
                     var mouseX, mouseY;
                     $(minimapCanvas).bind('mousemove', function(e) {
                             $(zoomedCanvas).css({
-                                    'top': e.pageY + 64,
-                                    'left': e.pageX + 64
+                                    'top': e.pageY + 32,
+                                    'left': e.pageX + 32
                                 });
                             mouseX = e.pageX - $(minimapCanvas).offset()['left'];
                             mouseY = e.pageY - $(minimapCanvas).offset()['top'];
@@ -119,7 +119,7 @@ info.ehuber.lab.minimap.ParticleCraft.prototype.draw = function(minimapCanvas, g
             $(this.units).each(function(_, u) {
                     // draw a patch.
                     ctx.fillStyle = 'rgb(255,0,0)';
-                    var half_sz = ((gameViewport.x1 - gameViewport.x0) / 20) / 2;
+                    var half_sz = ((gameViewport.x1 - gameViewport.x0) / 10) / 2;
                     ctx.fillRect(u.p.x - half_sz, u.p.y - half_sz, half_sz, half_sz);
                 });
             // And draw the zoomed viewport if showing zoomed canvas.
@@ -143,7 +143,7 @@ info.ehuber.lab.minimap.ParticleCraft.prototype.drawZoomed = function(zoomedCanv
         {
             // For each unit,
             ctx.scale(zoomedCanvas.height, zoomedCanvas.height);
-            ctx.transform(zoomedViewport.x0, zoomedViewport.y0);
+            ctx.translate(-zoomedViewport.x0, -zoomedViewport.y0);
             ctx.scale(1 / zoomedViewport.width, 1 / zoomedViewport.width);
             ctx.fillStyle = 'rgb(0,255,0)';
             $(this.units).each(function(_, u) {
