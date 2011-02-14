@@ -10,6 +10,8 @@ info.ehuber.lab.minimap.ParticleCraft = function(minimapCanvas, zoomedCanvas) {
             gameViewport.x1 = gameSize * (minimapCanvas.width / minimapCanvas.height);
             gameViewport.y0 = 0;
             gameViewport.y1 = gameSize;
+            gameViewport.width = gameViewport.x1 - gameViewport.x0;
+            gameViewport.height = gameViewport.y1 - gameViewport.y0;
             // make units spread out over entire game space,
             that.makeUnits(10, gameViewport);
             // load sprites, then continue.
@@ -33,21 +35,19 @@ info.ehuber.lab.minimap.ParticleCraft = function(minimapCanvas, zoomedCanvas) {
                     setInterval(function() {
                             // step logic,
                             that.update(dt / 1000);
-                            // the viewport is in game units, where
-                            // (1, 1) is the right, bottommost corner
-                            // of the minimap,
-                            var viewport = {};
+                            // decide the zoomed viewport.
                             var coordX = mouseX / minimapCanvas.width;
                             var coordY = mouseY / minimapCanvas.height;
-                            var viewport_w = 0.25;
-                            var viewport_h = (viewport_w / zoomedCanvas.width) * zoomedCanvas.height;
-                            viewport.x0 = coordX - (viewport_w / 2);
-                            viewport.y0 = coordY - (viewport_h / 2);
-                            viewport.x1 = coordX + (viewport_w / 2);
-                            viewport.y1 = coordY + (viewport_h / 2);
+                            var zoomedViewport = {};
+                            zoomedViewport.width = 0.25;
+                            zoomedViewport.height = (zoomedViewport.width / zoomedCanvas.width) * zoomedCanvas.height;
+                            zoomedViewport.x0 = coordX - (zoomedViewport.width / 2);
+                            zoomedViewport.y0 = coordY - (zoomedViewport.height / 2);
+                            zoomedViewport.x1 = coordX + (zoomedViewport.width / 2);
+                            zoomedViewport.y1 = coordY + (zoomedViewport.height / 2);
                             // draw the minimap and zoomed canvases.
-                            that.draw(minimapCanvas, viewport);
-                            that.drawZoomed(zoomedCanvas, viewport);
+                            that.draw(minimapCanvas, gameViewport, zoomedViewport);
+                            that.drawZoomed(zoomedCanvas, zoomedViewport);
                         }, dt);
                 });
         });
@@ -106,45 +106,49 @@ info.ehuber.lab.minimap.ParticleCraft.prototype.update = function(dt) {
         });
 };
 
-info.ehuber.lab.minimap.ParticleCraft.prototype.draw = function(minimapCanvas, viewport) {
+info.ehuber.lab.minimap.ParticleCraft.prototype.draw = function(minimapCanvas, gameViewport, zoomedViewport) {
     if ($(minimapCanvas).is(':visible')) {
         // TEMP
         var ctx = minimapCanvas.getContext('2d');
-        ctx.fillStyle = 'rgb(255,255,255)';
+        ctx.fillStyle = 'rgb(0,0,0)';
         ctx.fillRect(0, 0, minimapCanvas.width, minimapCanvas.height);
-        // For each unit,
-        $(this.units).each(function(_, u) {
-                // draw a patch.
-                ctx.fillStyle = 'rgb(255,0,0)';
-                var x = u.p.x * minimapCanvas.width;
-                var y = u.p.y * minimapCanvas.height;
-                var sz = 2;
-                ctx.fillRect(x - sz, y - sz, sz, sz);
-            });
-        // draw the zoomed viewport.
-        ctx.strokeStyle = 'rgb(0,0,0)';
-        ctx.lineWidth = 1;
-        var lens = {};
-        lens.x0 = viewport.x0 * minimapCanvas.width * (minimapCanvas.height / minimapCanvas.width);
-        lens.x1 = viewport.x1 * minimapCanvas.width * (minimapCanvas.height / minimapCanvas.width);
-        lens.y0 = viewport.y0 * minimapCanvas.height;
-        lens.y1 = viewport.y1 * minimapCanvas.height;
-        ctx.strokeRect(lens.x0, lens.y0, lens.x1 - lens.x0, lens.y1 - lens.y0);
+        ctx.save();
+        {
+            // For each unit,
+            ctx.scale(minimapCanvas.width, minimapCanvas.height); // need transform too, to account for viewport position.
+            $(this.units).each(function(_, u) {
+                    // draw a patch.
+                    ctx.fillStyle = 'rgb(255,0,0)';
+                    var half_sz = ((gameViewport.x1 - gameViewport.x0) / 20) / 2;
+                    ctx.fillRect(u.p.x - half_sz, u.p.y - half_sz, half_sz, half_sz);
+                });
+            // And draw the zoomed viewport.
+            ctx.strokeStyle = 'rgb(255,255,255)';
+            ctx.lineWidth = 0.01; // how to be sure this is visible?
+            ctx.strokeRect(zoomedViewport.x0, zoomedViewport.y0, zoomedViewport.width, zoomedViewport.height);
+        }
+        ctx.restore();
     }
 };
 
-info.ehuber.lab.minimap.ParticleCraft.prototype.drawZoomed = function(zoomedCanvas, viewport) {
+info.ehuber.lab.minimap.ParticleCraft.prototype.drawZoomed = function(zoomedCanvas, zoomedViewport) {
     var ctx = zoomedCanvas.getContext('2d');
     if ($(zoomedCanvas).is(':visible')) {
-        //TEMP
-        ctx.fillStyle = 'rgb(0, 0, 0)';
+        // Fill in background.
+        ctx.fillStyle = 'rgb(100, 100, 100)';
         ctx.fillRect(0, 0, zoomedCanvas.width, zoomedCanvas.height);
-        //////
-        ctx.fillstyle = 'rgb(255,0,0)';
-        $(this.units).each(function(_, u) {
-                var sz = 5;
-                var screenPX = u.p[0] * zoomedCanvas.width;
-                ctx.fillRect(u.p.x - (sz / 2), u.p.y - (sz / 2), sz, sz);
-            });
+        ctx.save();
+        {
+            // For each unit,
+            ctx.scale(zoomedCanvas.height, zoomedCanvas.height);
+            ctx.transform(zoomedViewport.x0, zoomedViewport.y0);
+            ctx.scale(1 / zoomedViewport.width, 1 / zoomedViewport.width);
+            ctx.fillStyle = 'rgb(0,255,0)';
+            $(this.units).each(function(_, u) {
+                    // draw the sprite!
+                    ctx.fillRect(u.p.x - 0.1, u.p.y - 0.1, 0.1, 0.1);
+                });
+        }
+        ctx.restore();
     }
 };

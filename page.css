@@ -1,5 +1,8 @@
-body {
-    background-color: red;
+#container {
+    width: 160px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 200px;
 }
 
 #zoomed_canvas {
