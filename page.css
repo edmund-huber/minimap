@@ -2,15 +2,8 @@ body {
     background-color: red;
 }
 
-#minimap_canvas {
-    width: 160;
-    height: 120;
-}
-
 #zoomed_canvas {
     position: absolute;
-    width: 320;
-    height: 240;
 }
 
 .sprite {
