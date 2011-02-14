@@ -46,7 +46,7 @@ info.ehuber.lab.minimap.ParticleCraft = function(minimapCanvas, zoomedCanvas) {
                             zoomedViewport.x1 = coordX + (zoomedViewport.width / 2);
                             zoomedViewport.y1 = coordY + (zoomedViewport.height / 2);
                             // draw the minimap and zoomed canvases.
-                            that.draw(minimapCanvas, gameViewport, zoomedViewport);
+                            that.draw(minimapCanvas, gameViewport, zoomedCanvas, zoomedViewport);
                             that.drawZoomed(zoomedCanvas, zoomedViewport);
                         }, dt);
                 });
@@ -106,34 +106,36 @@ info.ehuber.lab.minimap.ParticleCraft.prototype.update = function(dt) {
         });
 };
 
-info.ehuber.lab.minimap.ParticleCraft.prototype.draw = function(minimapCanvas, gameViewport, zoomedViewport) {
+info.ehuber.lab.minimap.ParticleCraft.prototype.draw = function(minimapCanvas, gameViewport, zoomedCanvas, zoomedViewport) {
     if ($(minimapCanvas).is(':visible')) {
-        // TEMP
         var ctx = minimapCanvas.getContext('2d');
+        // Fill in the background.
         ctx.fillStyle = 'rgb(0,0,0)';
         ctx.fillRect(0, 0, minimapCanvas.width, minimapCanvas.height);
         ctx.save();
         {
             // For each unit,
-            ctx.scale(minimapCanvas.width, minimapCanvas.height); // need transform too, to account for viewport position.
+            ctx.scale(minimapCanvas.width, minimapCanvas.width); // need transform too, to account for viewport position.
             $(this.units).each(function(_, u) {
                     // draw a patch.
                     ctx.fillStyle = 'rgb(255,0,0)';
                     var half_sz = ((gameViewport.x1 - gameViewport.x0) / 20) / 2;
                     ctx.fillRect(u.p.x - half_sz, u.p.y - half_sz, half_sz, half_sz);
                 });
-            // And draw the zoomed viewport.
-            ctx.strokeStyle = 'rgb(255,255,255)';
-            ctx.lineWidth = 0.01; // how to be sure this is visible?
-            ctx.strokeRect(zoomedViewport.x0, zoomedViewport.y0, zoomedViewport.width, zoomedViewport.height);
+            // And draw the zoomed viewport if showing zoomed canvas.
+            if ($(zoomedCanvas).is(':visible')) {
+                ctx.strokeStyle = 'rgb(255,255,255)';
+                ctx.lineWidth = 0.01; // how to be sure this is visible?
+                ctx.strokeRect(zoomedViewport.x0, zoomedViewport.y0, zoomedViewport.width, zoomedViewport.height);
+            }
         }
         ctx.restore();
     }
 };
 
 info.ehuber.lab.minimap.ParticleCraft.prototype.drawZoomed = function(zoomedCanvas, zoomedViewport) {
-    var ctx = zoomedCanvas.getContext('2d');
     if ($(zoomedCanvas).is(':visible')) {
+        var ctx = zoomedCanvas.getContext('2d');
         // Fill in background.
         ctx.fillStyle = 'rgb(100, 100, 100)';
         ctx.fillRect(0, 0, zoomedCanvas.width, zoomedCanvas.height);
