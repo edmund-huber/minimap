@@ -13,7 +13,7 @@ info.ehuber.lab.minimap.ParticleCraft = function(minimapCanvas, zoomedCanvas) {
             gameViewport.width = gameViewport.x1 - gameViewport.x0;
             gameViewport.height = gameViewport.y1 - gameViewport.y0;
             // make units spread out over entire game space,
-            that.makeUnits(10, gameViewport);
+            that.makeUnits(20, gameViewport);
             // load sprites, then continue.
             that.waitForSprites(function() {
                     // show zoomed view on mouse hover, also get mouse position.
