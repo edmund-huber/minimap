@@ -36,7 +36,7 @@ info.ehuber.lab.minimap.ParticleCraft = function(minimapCanvas, zoomedCanvas) {
                             // step logic,
                             that.update(dt / 1000);
                             // decide the zoomed viewport.
-                            var coordX = mouseX / minimapCanvas.width;
+                            var coordX = mouseX / minimapCanvas.height;
                             var coordY = mouseY / minimapCanvas.height;
                             var zoomedViewport = {};
                             zoomedViewport.width = 0.25;
@@ -47,7 +47,7 @@ info.ehuber.lab.minimap.ParticleCraft = function(minimapCanvas, zoomedCanvas) {
                             zoomedViewport.y1 = coordY + (zoomedViewport.height / 2);
                             // draw the minimap and zoomed canvases.
                             that.draw(minimapCanvas, gameViewport, zoomedCanvas, zoomedViewport);
-                            that.drawZoomed(zoomedCanvas, zoomedViewport);
+                            that.drawZoomed(gameViewport, zoomedCanvas, zoomedViewport);
                         }, dt);
                 });
         });
@@ -115,7 +115,9 @@ info.ehuber.lab.minimap.ParticleCraft.prototype.draw = function(minimapCanvas, g
         ctx.save();
         {
             // For each unit,
-            ctx.scale(minimapCanvas.width, minimapCanvas.width); // need transform too, to account for viewport position.
+            ctx.scale(minimapCanvas.height, minimapCanvas.height);
+            
+            // need translate() too, to account for viewport position. Meh
             $(this.units).each(function(_, u) {
                     // draw a patch.
                     ctx.fillStyle = 'rgb(255,0,0)';
@@ -133,7 +135,7 @@ info.ehuber.lab.minimap.ParticleCraft.prototype.draw = function(minimapCanvas, g
     }
 };
 
-info.ehuber.lab.minimap.ParticleCraft.prototype.drawZoomed = function(zoomedCanvas, zoomedViewport) {
+info.ehuber.lab.minimap.ParticleCraft.prototype.drawZoomed = function(gameViewport, zoomedCanvas, zoomedViewport) {
     if ($(zoomedCanvas).is(':visible')) {
         var ctx = zoomedCanvas.getContext('2d');
         // Fill in background.
@@ -143,11 +145,12 @@ info.ehuber.lab.minimap.ParticleCraft.prototype.drawZoomed = function(zoomedCanv
         {
             // For each unit,
             ctx.scale(zoomedCanvas.height, zoomedCanvas.height);
+            ctx.scale(gameViewport.width / zoomedViewport.width, gameViewport.height / zoomedViewport.height);
             ctx.translate(-zoomedViewport.x0, -zoomedViewport.y0);
-            ctx.scale(1 / zoomedViewport.width, 1 / zoomedViewport.width);
             ctx.fillStyle = 'rgb(0,255,0)';
             $(this.units).each(function(_, u) {
                     // draw the sprite!
+                    
                     ctx.fillRect(u.p.x - 0.1, u.p.y - 0.1, 0.1, 0.1);
                 });
         }
