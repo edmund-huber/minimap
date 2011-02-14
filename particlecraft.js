@@ -34,7 +34,7 @@ info.ehuber.lab.minimap.ParticleCraft = function(minimapCanvas, zoomedCanvas) {
                     var dt = 20;
                     setInterval(function() {
                             // step logic,
-                            that.update(dt / 1000);
+                            that.update(dt / 1000, (new Date()).getTime() / 1000, gameViewport);
                             // decide the zoomed viewport.
                             var coordX = mouseX / minimapCanvas.height;
                             var coordY = mouseY / minimapCanvas.height;
@@ -62,12 +62,11 @@ info.ehuber.lab.minimap.ParticleCraft.prototype.makeUnits = function(count, game
         unit.p = {};
         unit.p.x = gameViewport.x0 + (Math.random() * (gameViewport.x1 - gameViewport.x0));
         unit.p.y = gameViewport.y0 + (Math.random() * (gameViewport.y1 - gameViewport.y0));
-        // velocity,
-        unit.v = {};
-        unit.v.x = 0;
-        unit.v.y = 0;
+        // orienation,
+        unit.ori = 0;
         // frame of animation,
-        unit.frame = 1000 * Math.random();
+        unit.nextFrame = ((new Date()).getTime() / 1000) + (Math.random() * 3);
+        unit.frame = 0;
         // done.
         this.units.push(unit);
     }
@@ -92,16 +91,41 @@ info.ehuber.lab.minimap.ParticleCraft.prototype.waitForSprites = function(cont) 
     waiting();
 };
 
-info.ehuber.lab.minimap.ParticleCraft.prototype.update = function(dt) {
+info.ehuber.lab.minimap.ParticleCraft.prototype.update = function(dt, now, gameViewport) {
     // For each unit,
-    $(this.units).each(function(i, u) {
-            // decide whether he's moving or not,
-            if (true) {
-                //u.p = [u.p.x + (u.v.x * dt), u.p.y + (u.v.y * dt)];
+    $(this.units).each(function(_, u) {
+            // time for a new animation frame?
+            if (now >= u.nextFrame) {
+                u.frame = (u.frame + 1) % 8;
+                u.nextFrame = now + 0.1;
             }
-            // decide whether he's changing direction or not.
-            if (Math.floor(Math.random(0, 6)) == 0) {
-                u.ori = Math.floor(Math.random(0, 8));
+            // Move him along,
+            var ori_to_v = [[0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1]];
+            var v = ori_to_v[u.ori];
+            var len_v = 0.05 * Math.sqrt((v[0] * v[0]) + (v[1] * v[1]));
+            var v_x = v[0] * len_v;
+            var v_y = v[1] * len_v;
+            u.p.x += v_x * dt;
+            u.p.y += v_y * dt;
+            // and mirror him back into game if he leaves the gameViewport.
+            if (u.p.x < gameViewport.x0) {
+                u.p.x = gameViewport.x1;
+            } else if (u.p.x > gameViewport.x1) {
+                u.p.x = gameViewport.x0;
+            }
+            if (u.p.y < gameViewport.y0) {
+                u.p.y = gameViewport.y1;
+            } else if (u.p.y > gameViewport.y1) {
+                u.p.y = gameViewport.y0;
+            }
+            // Decide whether he's changing direction or not.
+            if (Math.floor(Math.random(0) * 64) == 0) {
+                u.ori = u.ori + (1 - Math.floor(Math.random() * 3));
+                if (u.ori < 0) {
+                    u.ori = 7;
+                } else {
+                    u.ori = u.ori % 8;
+                }
             }
         });
 };
@@ -115,8 +139,7 @@ info.ehuber.lab.minimap.ParticleCraft.prototype.draw = function(minimapCanvas, g
         ctx.save();
         {
             // For each unit,
-            ctx.scale(minimapCanvas.height, minimapCanvas.height);
-            
+            ctx.scale(minimapCanvas.height, minimapCanvas.height);            
             // need translate() too, to account for viewport position. Meh
             $(this.units).each(function(_, u) {
                     // draw a patch.
@@ -150,8 +173,10 @@ info.ehuber.lab.minimap.ParticleCraft.prototype.drawZoomed = function(gameViewpo
             ctx.fillStyle = 'rgb(0,255,0)';
             $(this.units).each(function(_, u) {
                     // draw the sprite!
-                    
-                    ctx.fillRect(u.p.x - 0.1, u.p.y - 0.1, 0.1, 0.1);
+                    var ori_to_dir = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+                    var dir = ori_to_dir[u.ori];
+                    ctx.drawImage($('.sprite.' + dir + '.' + u.frame)[0], u.p.x - 0.1, u.p.y - 0.1, 0.1, 0.1);
+                    //ctx.fillRect(u.p.x - 0.1, u.p.y - 0.1, 0.1, 0.1);
                 });
         }
         ctx.restore();
