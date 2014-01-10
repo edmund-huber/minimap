@@ -1,6 +1,4 @@
-provide('info.ehuber.lab.minimap');
-
-info.ehuber.lab.minimap.ParticleCraft = function(minimapCanvas, zoomedCanvas) {
+ParticleCraft = function(minimapCanvas, zoomedCanvas) {
     var that = this;
     $(document).ready(function() {
             // Infer the total game viewport (minimap by definition sees all),
@@ -53,7 +51,7 @@ info.ehuber.lab.minimap.ParticleCraft = function(minimapCanvas, zoomedCanvas) {
         });
 };
 
-info.ehuber.lab.minimap.ParticleCraft.prototype.makeUnits = function(count, gameViewport) {
+ParticleCraft.prototype.makeUnits = function(count, gameViewport) {
     // Prepare c units spread out over the game viewport:
     this.units = [];
     for(var i = count; i > 0; i--) {
@@ -72,7 +70,7 @@ info.ehuber.lab.minimap.ParticleCraft.prototype.makeUnits = function(count, game
     }
 };
 
-info.ehuber.lab.minimap.ParticleCraft.prototype.waitForSprites = function(cont) {
+ParticleCraft.prototype.waitForSprites = function(cont) {
     var sprites = $.makeArray($('.sprite'));
     var remaining = sprites.length;
     $('.sprite').load(function() {
@@ -91,7 +89,7 @@ info.ehuber.lab.minimap.ParticleCraft.prototype.waitForSprites = function(cont) 
     waiting();
 };
 
-info.ehuber.lab.minimap.ParticleCraft.prototype.update = function(dt, now, gameViewport) {
+ParticleCraft.prototype.update = function(dt, now, gameViewport) {
     // For each unit,
     $(this.units).each(function(_, u) {
             // time for a new animation frame?
@@ -130,7 +128,7 @@ info.ehuber.lab.minimap.ParticleCraft.prototype.update = function(dt, now, gameV
         });
 };
 
-info.ehuber.lab.minimap.ParticleCraft.prototype.draw = function(minimapCanvas, gameViewport, zoomedCanvas, zoomedViewport) {
+ParticleCraft.prototype.draw = function(minimapCanvas, gameViewport, zoomedCanvas, zoomedViewport) {
     if ($(minimapCanvas).is(':visible')) {
         var ctx = minimapCanvas.getContext('2d');
         // Fill in the background.
@@ -158,7 +156,7 @@ info.ehuber.lab.minimap.ParticleCraft.prototype.draw = function(minimapCanvas, g
     }
 };
 
-info.ehuber.lab.minimap.ParticleCraft.prototype.drawZoomed = function(gameViewport, zoomedCanvas, zoomedViewport) {
+ParticleCraft.prototype.drawZoomed = function(gameViewport, zoomedCanvas, zoomedViewport) {
     if ($(zoomedCanvas).is(':visible')) {
         var ctx = zoomedCanvas.getContext('2d');
         // Fill in background.

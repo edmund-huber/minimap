@@ -1,9 +1,7 @@
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="/css/reset.css"/>
-    <link rel="stylesheet" type="text/css" href="page.css"/>
-    <script type="text/javascript" src="/js/site.js"></script>
-    <script type="text/javascript" src="/js/jquery-1.4.3.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/reset.css"/>
+    <script type="text/javascript" src="/static/jquery-1.10.2.js"></script>
     <script type="text/javascript" src="particlecraft.js"></script>
     <script type="text/javascript" src="page.js"></script>
   </head>
@@ -15,7 +13,7 @@
       <canvas id="minimap_canvas" width="160" height="120"></canvas>
     </div>
     <canvas id="zoomed_canvas" style="display: none;" width="320" height="240"></canvas>
-    <!-- TODO: could save a lot of loading time by spriting these. -->
+    <div style="display: none;">
     <img class="sprite E 0" src="sprites/cow/walking-E-0.png"/>
     <img class="sprite E 1" src="sprites/cow/walking-E-1.png"/>
     <img class="sprite E 2" src="sprites/cow/walking-E-2.png"/>
@@ -80,5 +78,6 @@
     <img class="sprite W 5" src="sprites/cow/walking-W-5.png"/>
     <img class="sprite W 6" src="sprites/cow/walking-W-6.png"/>
     <img class="sprite W 7" src="sprites/cow/walking-W-7.png"/>
+    </div>
   </body>
 </html>
